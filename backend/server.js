@@ -31,21 +31,21 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Compressão de Vídeo com FFmpeg
-const compressVideo = (inputPath, outputPath) => {
-  return new Promise((resolve, reject) => {
-    const command = `ffmpeg -i "${inputPath}" -vcodec libx264 -crf 28 "${outputPath}"`;
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        console.error("Erro ao comprimir vídeo:", error.message);
-        console.error(stderr);
-        reject(error);
-      } else {
-        console.log("Vídeo comprimido com sucesso:", outputPath);
-        resolve(outputPath);
-      }
-    });
-  });
-};
+// const compressVideo = (inputPath, outputPath) => {
+//   return new Promise((resolve, reject) => {
+//     const command = `ffmpeg -i "${inputPath}" -vcodec libx264 -crf 28 "${outputPath}"`;
+//     exec(command, (error, stdout, stderr) => {
+//       if (error) {
+//         console.error("Erro ao comprimir vídeo:", error.message);
+//         console.error(stderr);
+//         reject(error);
+//       } else {
+//         console.log("Vídeo comprimido com sucesso:", outputPath);
+//         resolve(outputPath);
+//       }
+//     });
+//   });
+// };
 
 // Rota para Upload de Vídeo com Compressão
 app.post("/upload", upload.single("video"), async (req, res) => {
@@ -61,7 +61,7 @@ app.post("/upload", upload.single("video"), async (req, res) => {
   );
 
   try {
-    await compressVideo(originalPath, compressedPath);
+    // await compressVideo(originalPath, compressedPath);
 
     // Remove o vídeo original após compressão
     fs.unlinkSync(originalPath);
