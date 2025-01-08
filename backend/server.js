@@ -5,7 +5,7 @@ const path = require("path");
 const fs = require("fs"); // Módulo para ler arquivos no diretório
 
 const app = express();
-const PORT = 5000;
+const PORT = 3001;
 
 // Middleware para CORS
 app.use(
