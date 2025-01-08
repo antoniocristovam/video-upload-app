@@ -10,14 +10,12 @@ const PORT = 3001;
 // Middleware para CORS
 app.use(
   cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
+    origin: "*", // Permite qualquer origem (use com cuidado em produção)
+    methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type"],
   })
 );
-
 app.use(express.json());
-
 // Armazenamento de arquivos com Multer
 const storage = multer.diskStorage({
   destination: "./uploads/",
