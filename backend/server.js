@@ -32,7 +32,7 @@ app.post("/upload", upload.single("video"), (req, res) => {
     return res.status(400).send("Nenhum arquivo foi enviado.");
   }
   res.json({
-    filePath: `http://localhost:${PORT}/uploads/${req.file.filename}`,
+    filePath: `http://192.168.1.100:${PORT}/uploads/${req.file.filename}`,
   });
 });
 
@@ -48,7 +48,7 @@ app.get("/videos", (req, res) => {
       /\.(mp4|mov|avi|mkv)$/i.test(file)
     );
     const videoUrls = videoFiles.map(
-      (file) => `http://localhost:${PORT}/uploads/${file}`
+      (file) => `http://192.168.1.100:${PORT}/uploads/${file}`
     );
 
     res.json(videoUrls);
@@ -60,5 +60,5 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Iniciar o Servidor
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log(`Servidor rodando em http://192.168.1.100:${PORT}`);
 });
