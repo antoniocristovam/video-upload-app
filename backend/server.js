@@ -11,7 +11,7 @@ const PORT = 3333;
 // Middleware para CORS
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "http://192.168.1.100:5173",
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
   })
@@ -62,7 +62,7 @@ app.post("/upload", upload.single("video"), async (req, res) => {
     // Remove o vídeo original após compressão
     fs.unlinkSync(originalPath);
 
-    res.json({ filePath: `http://localhost:${PORT}/${compressedPath}` });
+    res.json({ filePath: `http://192.168.1.100:${PORT}/${compressedPath}` });
   } catch (error) {
     res.status(500).json({ error: "Erro ao comprimir o vídeo." });
   }
@@ -80,7 +80,7 @@ app.get("/videos", (req, res) => {
       /\.(mp4|mov|avi|mkv)$/i.test(file)
     );
     const videoUrls = videoFiles.map(
-      (file) => `http://localhost:${PORT}/uploads/${file}`
+      (file) => `http://192.168.1.100:${PORT}/uploads/${file}`
     );
 
     res.json(videoUrls);
@@ -92,5 +92,5 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Iniciar o Servidor
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log(`Servidor rodando em http://192.168.1.100:${PORT}`);
 });
