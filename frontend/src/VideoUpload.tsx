@@ -23,7 +23,7 @@ const VideoUpload: React.FC = () => {
 
     try {
       const response = await axios.post<UploadResponse>(
-        "http://localhost:3333/upload",
+        "http://localhost:3001/upload",
         formData,
         {
           headers: {

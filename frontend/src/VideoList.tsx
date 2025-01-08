@@ -9,7 +9,7 @@ const VideoList: React.FC = () => {
     const fetchVideos = async () => {
       try {
         const response = await axios.get<string[]>(
-          "http://localhost:3333/videos"
+          "http://localhost:3001/videos"
         );
         setVideos(response.data);
       } catch (error) {
