@@ -11,8 +11,8 @@ const PORT = 3333;
 // Middleware para CORS
 app.use(
   cors({
-    origin: "http://192.168.1.100:5173",
-    methods: ["GET", "POST"],
+    origin: "*", // Permite qualquer origem (use com cuidado em produção)
+    methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type"],
   })
 );
