@@ -2,25 +2,23 @@ const express = require("express");
 const multer = require("multer");
 const cors = require("cors");
 const path = require("path");
-const fs = require("fs");
-const { exec } = require("child_process");
+const fs = require("fs"); // Módulo para ler arquivos no diretório
 
 const app = express();
-const PORT = 3001;
+const PORT = 5000;
 
-// Middleware para CORS (Ajustado)
+// Middleware para CORS
 app.use(
   cors({
-    origin: "*", // Permite qualquer origem (use com cuidado em produção)
-    methods: ["GET", "POST", "OPTIONS"],
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
   })
 );
 
-// Middleware padrão do Express
 app.use(express.json());
 
-// Armazenamento com Multer
+// Armazenamento de arquivos com Multer
 const storage = multer.diskStorage({
   destination: "./uploads/",
   filename: (req, file, cb) => {
@@ -30,50 +28,14 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Compressão de Vídeo com FFmpeg
-// const compressVideo = (inputPath, outputPath) => {
-//   return new Promise((resolve, reject) => {
-//     const command = `ffmpeg -i "${inputPath}" -vcodec libx264 -crf 28 "${outputPath}"`;
-//     exec(command, (error, stdout, stderr) => {
-//       if (error) {
-//         console.error("Erro ao comprimir vídeo:", error.message);
-//         console.error(stderr);
-//         reject(error);
-//       } else {
-//         console.log("Vídeo comprimido com sucesso:", outputPath);
-//         resolve(outputPath);
-//       }
-//     });
-//   });
-// };
-
-// Rota para Upload de Vídeo com Compressão
-app.post("/upload", upload.single("video"), async (req, res) => {
+// Rota para Upload de Vídeo
+app.post("/upload", upload.single("video"), (req, res) => {
   if (!req.file) {
-    return res.status(400).json({ error: "Nenhum arquivo foi enviado." });
+    return res.status(400).send("Nenhum arquivo foi enviado.");
   }
-
-  const originalPath = req.file.path;
-  const compressedPath = path.join(
-    __dirname,
-    "uploads",
-    `compressed-${req.file.filename}`
-  );
-
-  try {
-    // await compressVideo(originalPath, compressedPath);
-
-    // Remove o vídeo original após compressão
-    fs.unlinkSync(originalPath);
-
-    res.json({
-      message: "Upload e compressão bem-sucedidos.",
-      filePath: `http://192.168.1.100:${PORT}/uploads/compressed-${req.file.filename}`,
-    });
-  } catch (error) {
-    console.error("Erro no upload/compressão:", error.message);
-    res.status(500).json({ error: "Erro ao comprimir o vídeo." });
-  }
+  res.json({
+    filePath: `http://localhost:${PORT}/uploads/${req.file.filename}`,
+  });
 });
 
 // Rota para Listar Vídeos
@@ -81,15 +43,14 @@ app.get("/videos", (req, res) => {
   const uploadsDir = path.join(__dirname, "uploads");
   fs.readdir(uploadsDir, (err, files) => {
     if (err) {
-      console.error("Erro ao listar vídeos:", err.message);
-      return res.status(500).json({ error: "Erro ao listar vídeos." });
+      return res.status(500).json({ error: "Erro ao listar vídeos" });
     }
 
     const videoFiles = files.filter((file) =>
       /\.(mp4|mov|avi|mkv)$/i.test(file)
     );
     const videoUrls = videoFiles.map(
-      (file) => `http://192.168.1.100:${PORT}/uploads/${file}`
+      (file) => `http://localhost:${PORT}/uploads/${file}`
     );
 
     res.json(videoUrls);
@@ -101,5 +62,5 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Iniciar o Servidor
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando em: http://192.168.1.100:${PORT}`);
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
