@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-interface UploadResponse {
-  filePath: string;
-}
-
 const VideoUpload: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
@@ -22,7 +18,7 @@ const VideoUpload: React.FC = () => {
     formData.append("video", file);
 
     try {
-      const response = await axios.post<UploadResponse>(
+      const response = await axios.post(
         "http://192.168.1.100:3001/upload",
         formData,
         {
@@ -32,6 +28,7 @@ const VideoUpload: React.FC = () => {
         }
       );
       setVideoUrl(response.data.filePath);
+      console.log("Upload bem-sucedido:", response.data.filePath);
     } catch (error) {
       console.error("Erro no upload:", error);
     }
@@ -47,7 +44,7 @@ const VideoUpload: React.FC = () => {
           <h3>Vídeo Enviado:</h3>
           <video controls width="400">
             <source src={videoUrl} type="video/mp4" />
-            Seu navegador não suporta a reprodução de vídeos.
+            Seu navegador não suporta reprodução de vídeo.
           </video>
         </div>
       )}

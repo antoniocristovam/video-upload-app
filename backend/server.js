@@ -6,7 +6,7 @@ const fs = require("fs");
 const { exec } = require("child_process");
 
 const app = express();
-const PORT = 3333;
+const PORT = 3001;
 
 // Middleware para CORS (Ajustado)
 app.use(cors());
