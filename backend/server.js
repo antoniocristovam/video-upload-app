@@ -9,16 +9,13 @@ const app = express();
 const PORT = 3001;
 
 // Middleware para CORS (Ajustado)
-app.use(cors());
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*"); // Permite qualquer origem (use com cuidado em produção)
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type");
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(204); // Responde a requisições pré-voo com sucesso
-  }
-  next();
-});
+app.use(
+  cors({
+    origin: "*", // Permite qualquer origem (use com cuidado em produção)
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
 
 // Middleware padrão do Express
 app.use(express.json());
